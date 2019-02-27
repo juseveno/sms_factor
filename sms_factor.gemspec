@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name          = 'sms_factor'
-  s.version       = '0.2.1'
+  s.version       = '0.2.2'
   s.date          = '2015-07-17'
   s.summary       = "An easy way to send SMS through SmsFactor API"
   s.description   = "An easy way to use API SMS of http://www.smsfactor.com/ (http://www.smsfactor.com/api-sms)"
@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.licenses      = ["LGPL"]
   s.require_paths = ["lib"]
   s.extra_rdoc_files = ["LICENSE.txt", "README.rdoc"]
-  s.add_runtime_dependency "rest-client", '~> 1.8', '>= 1.8.0'
+  s.add_runtime_dependency "rest-client", '~> 2.0.2', '>= 2.0.2'
   s.required_ruby_version = '>= 2.2.0'
-  s.requirements << 'rest-client, >= 1.8.0'
+  s.requirements << 'rest-client, >= 2.0.2'
   s.requirements << 'An account on http://www.smsfactor.com/'
 end
