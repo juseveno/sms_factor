@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.smsfactor.com/send
+    body:
+      encoding: UTF-8
+      string: data=%7B%22sms%22%3A%7B%22message%22%3A%7B%22text%22%3A%22Mit+paroles+encoreloin+remit+aguets+glissa+rencontra.%22%2C%22sender%22%3A%22Lefevre+et+fils%22%2C%22pushtype%22%3A%22alert%22%7D%2C%22recipients%22%3A%7B%22gsm%22%3A%5B%7B%22value%22%3A%220799175425%22%7D%5D%7D%7D%7D
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (linux x86_64) ruby/2.7.8p225
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Verify-Ssl:
+      - 'false'
+      Authorization:
+      - Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTA1NiIsImlhdCI6MTY4MTIwMjU4MC44NzcyMDd9.qtUYYJtoIJOJT5EEOs1Bjs5l4rx7VDXI5ZJ10BZ6JtY
+      Content-Length:
+      - '275'
+      Host:
+      - api.smsfactor.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - no-cache, private
+      Date:
+      - Tue, 11 Apr 2023 09:16:15 GMT
+      Vary:
+      - Origin
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      Content-Encoding:
+      - gzip
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAEAzWNQQ6CUAxE79I1C74aEK7gwjPU/xvTUD/EFjfGuzOBuJuZvpl+yYNjdRpTQy9x56fQSPcbNRSaJwm4NJxT2/XdgDDPjqiFeEvRQPFyuvaA52DbV1zqQTyM82TqIWVvlHUxzfy3Wj9sihM+14UVzG8D1n4hPY8AAAA=
+  recorded_at: Tue, 11 Apr 2023 09:16:15 GMT
+recorded_with: VCR 6.1.0

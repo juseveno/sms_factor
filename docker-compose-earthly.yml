@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  # docker-compose run --rm gem [rspec [path to spec file]]
+  gem:
+    image: juseveno/sms_factor:latest
