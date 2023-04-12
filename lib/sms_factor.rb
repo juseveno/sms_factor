@@ -67,7 +67,6 @@ class SmsFactor
 
   def sms_factor_api_headers
     headers = {
-      content_type: :json,
       accept: :json,
       verify_ssl: false
     }

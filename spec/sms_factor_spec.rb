@@ -68,6 +68,10 @@ describe SmsFactor, vcr: true do
       it "doesn't deliver" do
         expect(described_class.sms(message, recipients)).not_to be_success
       end
+
+      it 'responds with status equal -1' do
+        expect(described_class.sms(message, '0799175425').status).to be(-1)
+      end
     end
 
     context 'with valid API key auth' do
