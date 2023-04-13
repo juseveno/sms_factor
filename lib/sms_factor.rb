@@ -37,12 +37,12 @@ class SmsFactor
     }
   end
 
-  def deliver(delay: :now, check: false)
+  def deliver(delay: :now, check: false, api_key: nil)
     SmsFactor::SmsResponse.new(
       RestClient.post(
         sms_factor_url(check),
         { data: build_deliver_data_from(delay).to_json },
-        sms_factor_api_headers
+        sms_factor_api_headers(api_key)
       )
     )
   end
@@ -65,14 +65,14 @@ class SmsFactor
     data
   end
 
-  def sms_factor_api_headers
+  def sms_factor_api_headers(api_key = null)
     headers = {
       accept: :json,
       verify_ssl: false
     }
 
     if SmsFactor::Init.configuration.api_auth?
-      headers[:Authorization] = "Bearer #{SmsFactor::Init.configuration.api_key}"
+      headers[:Authorization] = "Bearer #{api_key || SmsFactor::Init.configuration.api_key}"
     end
 
     headers
