@@ -1,62 +1,87 @@
-require 'rest-client'
+# frozen_string_literal: true
+
+require 'json'
 require 'nokogiri'
+require 'rest-client'
 
 class SmsFactor
   attr_accessor :message, :recipients, :sender
-  
+
   def initialize(message, recipients, sender = nil)
-    raise "The configuration is not complete. Please define api_url, api_login, api_password and api_default_from" unless SmsFactor::Init.configuration.is_valid?
-    
-    @sender      ||= SmsFactor::Init.configuration.api_default_from
-    @recipients    = recipients.kind_of?(Array) ? recipients : [recipients]
-    @message       = message
+    if SmsFactor::Init.configuration.invalid?
+      raise 'The configuration is not complete. Please define api_url, api_login, api_password and api_default_from"'
+    end
+
+    @sender ||= sender || SmsFactor::Init.configuration.api_default_from
+    @recipients = Array(recipients)
+    @message = message
   end
-  
-  def build
+
+  def build_deliver_data
     {
-      sms: auth_credentials.merge(
-        message: {text: @message, sender: @sender, pushtype: 'alert'},
-          recipients: {
-            gsm: @recipients.collect{|recipient| {value: recipient}}
-          }
-      )
+      sms: {
+        message: { text: @message, sender: @sender, pushtype: 'alert' },
+        recipients: {
+          gsm: @recipients.collect { |recipient| { value: recipient } }
+        }
+      }
     }
   end
-  
-  def auth_credentials
-    @auth_credentials ||= {
-                            authentication: {
-                              username: SmsFactor::Init.configuration.api_login,
-                              password: SmsFactor::Init.configuration.api_password
-                            }
-                          }
+
+  def credentials_auth
+    @credentials_auth ||= {
+      authentication: {
+        username: SmsFactor::Init.configuration.api_login,
+        password: SmsFactor::Init.configuration.api_password
+      }
+    }
   end
-  
-  def deliver(delay: :now, check: false)
-    data  =   case delay
-                when nil, :now
-                  build
-                else
-                  build[:sms].merge!({delay: delay})
-                end
-                
-    url   =   "#{SmsFactor::Init.configuration.api_url}/send"
-    url   =   "#{url}/simulate" if check
-    
+
+  def deliver(delay: :now, check: false, api_key: nil)
     SmsFactor::SmsResponse.new(
       RestClient.post(
-        url,
-        { data: data.to_json },
-        content_type: :json,
-        accept:       :json,
-        verify_ssl:   false
+        sms_factor_url(check),
+        { data: build_deliver_data_from(delay).to_json },
+        sms_factor_api_headers(api_key)
       )
     )
   end
-  
+
   def self.sms(message, recipients, sender = nil)
-    sms = SmsFactor.new(message, recipients, sender)
-    sms.deliver
+    SmsFactor.new(message, recipients, sender).deliver
+  end
+
+  private
+
+  def build_deliver_data_from(delay)
+    data = if delay.nil? || delay == :now
+             build_deliver_data
+           else
+             build_deliver_data[:sms].merge!(delay: delay)
+           end
+
+    data[:sms].merge!(credentials_auth) unless SmsFactor::Init.configuration.api_auth?
+
+    data
+  end
+
+  def sms_factor_api_headers(api_key = null)
+    headers = {
+      accept: :json,
+      verify_ssl: false
+    }
+
+    if SmsFactor::Init.configuration.api_auth?
+      headers[:Authorization] = "Bearer #{api_key || SmsFactor::Init.configuration.api_key}"
+    end
+
+    headers
+  end
+
+  def sms_factor_url(check)
+    url = "#{SmsFactor::Init.configuration.api_url}/send"
+    url += '/simulate' if check
+    url
   end
 end
 

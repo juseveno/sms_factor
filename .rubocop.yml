@@ -1,0 +1,19 @@
+require:
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7
+
+Metrics/BlockLength:
+  AllowedMethods: ['describe', 'context']
+
+Naming/RescuedExceptionsVariableName:
+  Enabled: Yes
+  PreferredName: error
+
+RSpec/NestedGroups:
+  Max: 4
+
+Style/Documentation:
+  Enabled: No
